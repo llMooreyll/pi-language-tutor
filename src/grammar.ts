@@ -52,6 +52,16 @@ export function registerReview(
 ): { disable(ctx: ExtensionContext): void } {
   let abort: AbortController | undefined
 
+  /**
+   * Hide the panel and drop any review still in flight. The config is left
+   * untouched, so the next prompt reviews as usual — this is the "make it go
+   * away now" action, not the "stop doing this" setting.
+   */
+  const clear = (ctx: ExtensionContext): void => {
+    abort?.abort()
+    ctx.ui.setWidget(WIDGET_KEY, undefined)
+  }
+
   const runReview = async (
     text: string,
     cfg: Config,
@@ -139,10 +149,10 @@ export function registerReview(
     void runReview(text, cfg, ctx, abort.signal)
   })
 
-  return {
-    disable(ctx) {
-      abort?.abort()
-      ctx.ui.setWidget(WIDGET_KEY, undefined)
-    }
-  }
+  pi.registerCommand('dismiss', {
+    description: 'Hide the Writing check / tutor panel — the next prompt reviews again',
+    handler: async (_args, ctx) => clear(ctx)
+  })
+
+  return { disable: clear }
 }
