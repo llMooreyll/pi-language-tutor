@@ -382,6 +382,9 @@ describe('buildReviewPrompt', () => {
     expect(prompt).toContain('"grammar"')
     expect(prompt).toContain(cfg.native)
   })
+  it('tells the review to leave capitalization alone', () => {
+    expect(prompt).toContain('Ignore capitalization')
+  })
 
   describe('with tutor off', () => {
     const offPrompt = buildReviewPrompt('some prompt', { ...cfg, tutor: false })

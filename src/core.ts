@@ -203,6 +203,7 @@ export function buildReviewPrompt(text: string, cfg: Config, contextual = false)
     ``,
     `Rules:`,
     `- Ignore code, file paths, identifiers, product names, and technical jargon — do not try to fix or translate them.`,
+    `- Ignore capitalization: never report a fragment whose only problem is its case (e.g. "i" for "I", "python" for "Python", or a lowercase sentence start).`,
     ...tutorRule,
     `- Never invent errors, never invent vocabulary the student did not express.`,
     ``,
